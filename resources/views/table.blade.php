@@ -4,6 +4,7 @@
 $title = $title ?? '';
 $columnNames = $columnNames ?? [];
 $htmlColumns = $htmlColumns ?? [];
+$columnsStyle = $columnsStyle ?? [];
 
 $table = $data->toArray(request());
 
@@ -102,7 +103,7 @@ foreach ($columns as $column) {
             <thead>
                 <tr>
                     @foreach($columns as $column)
-                        <th>
+                        <th @if (isset($columnsStyle[$column])) style="{{ $columnsStyle[$column] }}" @endif>
                             {{ $columnNames[$column] }}
                         </th>
                     @endforeach
@@ -113,11 +114,13 @@ foreach ($columns as $column) {
                 @foreach($table as $i => $row)
                     <tr>
                         @foreach($row as $column => $colData)
-                            @if (in_array($column, $htmlColumns))
-                                <td>{!! $colData !!}</td>
-                            @else
-                                <td>{{ $colData }}</td>
-                            @endif
+                            <td @if (isset($columnsStyle[$column])) style="{{ $columnsStyle[$column] }}" @endif>
+                                @if (in_array($column, $htmlColumns))
+                                    {!! $colData !!}
+                                @else
+                                    {{ $colData }}
+                                @endif
+                            </td>
                         @endforeach
                     </tr>
                 @endforeach
